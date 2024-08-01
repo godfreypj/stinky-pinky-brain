@@ -16,7 +16,7 @@ def generate_api():
         return jsonify({ "error": '''
             To get started, get an API key at
             https://g.co/ai/idxGetGeminiKey and enter it in
-            main.py
+            .env
             '''.replace('\n', '') })
     try:
         with open('data/training_data_1.txt', 'r') as file:
@@ -25,12 +25,10 @@ def generate_api():
         content = f"""
         Here are some examples of rhyming word pairs with clues:
         {training_data}
-        Now, your task is to devise FOUR sets of rhyming word pairs, each with a corresponding clue. 
-        Here's the structure for each set:
-            Word 1: [Word]\n
-            Clue 1: [A concise, evocative clue related to Word 1]\n
-            Word 2: [Word, rhyming with Word 1]\n
-            Clue 2: [A concise, evocative clue related to Word 2]\n\n
+        Now, your task is to devise ONE sets of rhyming word pairs, each with a corresponding clue. 
+        Provide the output in the following JSON format:
+        "word1": "[Word]", "clue1": "[A concise, evocative clue related to Word 1]", 
+        "word2": "[Word, rhyming with Word 1]", "clue2": "[A concise, evocative clue related to Word 2]"
         Guidelines:
         * The rhyming words should be thematically connected, adding an extra layer of intrigue.
         * Aim for words that are challenging to guess but not obscure. Think "satisfyingly tricky."
@@ -39,15 +37,41 @@ def generate_api():
 
         model_name = "gemini-1.5-pro"
         model = genai.GenerativeModel(model_name=model_name)
-        response = model.generate_content(content, stream=True)
-        def stream():
-            for chunk in response:
-                yield 'data: %s\n\n' % json.dumps({ "text": chunk.text })
+        full_response = ""
+        for chunk in model.generate_content(content, stream=True):
+            full_response += chunk.text
+        
+        # Parse the response into a structured format (you'll likely need to adjust this based on the exact format you want)
 
-        return stream(), {'Content-Type': 'text/event-stream'}
+        # full_response = full_response.strip()
 
+        full_response = full_response\
+        .replace("```json\n", "")\
+        .replace("","").replace("```", "")
+        # Split the response into lines
+        # Parse the JSON response
+        parsed_data = json.loads(full_response)
+        print("Parsed Data:", parsed_data)
+        # print("Parsed data" +parsed_data)
+        # Access the words and clues
+        word1 = parsed_data["word1"]
+        clue1 = parsed_data["clue1"]
+        word2 = parsed_data["word2"]
+        clue2 = parsed_data["clue2"]
+
+        parsed_data = {
+            "word1": word1,
+            "clue1": clue1,
+            "word2": word2,
+            "clue2": clue2
+        }
+
+        return jsonify({"text": parsed_data}), 200, {'Content-Type': 'application/json'}
     except Exception as e:
-        return jsonify({ "error": str(e) })
+        print("JSON Parsing Error:", e)
+        with app.app_context():
+            return jsonify({ "error": str(e) })
+
 
 
 @app.route('/<path:path>')
