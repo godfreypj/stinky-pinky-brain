@@ -24,22 +24,16 @@
           pip install -r requirements.txt
         '';
         # Open editors for the following files by default, if they exist:
-        default.openFiles = [ "web/index.html" "main.py" ];
+        default.openFiles = [ "main.py" ];
       };
+      onStart = {
+        command = "./devserver.sh 5000";
+      }; 
       # To run something each time the workspace is (re)started, use the `onStart` hook
     };
     # Enable previews and customize configuration
     previews = {
-      enable = true;
-      previews = {
-        web = {
-          command = ["./devserver.sh"];
-          env = {
-            PORT = "$PORT";
-          };
-          manager = "web";
-        };
-      };
+      enable = false;
     };
   };
 }
