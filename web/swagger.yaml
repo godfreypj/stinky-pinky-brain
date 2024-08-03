@@ -1,0 +1,35 @@
+openapi: 3.0.0
+info:
+  title: Stinky Pinky AI Game API
+  description: API for generating word pairs and clues for a Stinky Pinky game.
+  version: 1.0.0
+servers:
+  - url: http://localhost:80
+paths:
+  /generate:
+    get:
+      summary: Generate word pairs and clues.
+      responses:
+        '200':
+          description: Successful response with word pairs and clues.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  text:
+                    type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          word1:
+                            type: string
+                            description: The first word.
+                          clue1:
+                            type: string
+                            description: The clue for the first word.
+                          word2:
+                            type: string
+                            description: The second word.
+                          clue2:

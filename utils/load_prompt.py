@@ -21,5 +21,14 @@ def load_prompt(training_data):
         Here are some examples:
         {training_data}
         """
+    
+    # Add the desired response format
+    prompt += f"""
+    Provide the output in the following JSON format:
+    "word1": "[Word]"
+    "clue1": "[Clue related to Word 1]"
+    "word2": "[Word, rhyming with Word 1]"'
+    "clue2": "[Clue related to Word 2]"
+    """
     return prompt
 

@@ -59,4 +59,4 @@ def serve_static(path):
     return send_from_directory('web', path)
 
 if __name__ == "__main__":
-    app.run(port=int(os.environ.get('PORT', 80)))
+    app.run(port=int(os.environ.get('PORT', 5000)))
