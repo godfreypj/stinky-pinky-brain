@@ -1,17 +1,24 @@
 openapi: 3.0.0
 info:
-  title: Stinky Pinky AI Game API
-  description: API for generating word pairs and clues for a Stinky Pinky game.
+  title: Stinky Pinky AI API
+  description: An API that generates word puzzles using Generative AI.
   version: 1.0.0
 servers:
-  - url: http://localhost:80
+  - url: /
 paths:
-  /generate:
+  /:
     get:
-      summary: Generate word pairs and clues.
+      description: Serves this page - the Swagger Docs.
       responses:
-        '200':
-          description: Successful response with word pairs and clues.
+        200:
+          description: HTML content for the API Docs.
+
+  /api/generate:
+    get:
+      description: Generates a word puzzle using AI. Requires a valid API key.
+      responses:
+        200:
+          description: A JSON object containing the generated word puzzle.
           content:
             application/json:
               schema:
@@ -20,16 +27,39 @@ paths:
                   text:
                     type: object
                     properties:
-                      data:
-                        type: object
-                        properties:
-                          word1:
-                            type: string
-                            description: The first word.
-                          clue1:
-                            type: string
-                            description: The clue for the first word.
-                          word2:
-                            type: string
-                            description: The second word.
-                          clue2:
+                      clue1: 
+                        type: string
+                      clue2:
+                        type: string
+                      word1:
+                        type: string
+                      word2:
+                        type: string
+        400:
+          description: Bad request. Missing or invalid API key.
+        500:
+          description: Internal server error. Problem with training data or prompt.
+        404:
+          description: Not found. Error occurred during puzzle generation.
+
+  /{path}: 
+    get:
+      description: Serves static files (CSS, JavaScript, images) for the web interface.
+      parameters:
+        - in: path
+          name: path
+          schema:
+            type: string
+          required: true
+      responses:
+        200:
+          description: The requested static file.
+
+components:
+  securitySchemes:
+    ApiKeyAuth:        # TODO
+      type: apiKey
+      in: header
+      name: X-API-Key
+security:
+  - ApiKeyAuth: []

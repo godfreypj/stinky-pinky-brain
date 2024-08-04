@@ -16,7 +16,7 @@ The frontend of the game sends a request to the `api/generate` endpoint. The app
 > The combined data is sent to the specified LLM to generate a response.
 
 ### 4. Response Parsing
-> The LLM's response, expected to be in JSON format, is parsed to extract word pairs and clues. The extracted data is returned to the frontend in JSON format for the game to use.
+> The LLM's response - expected to be in JSON format - is parsed to extract word pairs and clues. The extracted data is returned to the frontend in JSON format.
 
 ## 💿 Project IDX
 This project is designed to work within the Google Project IDX environment. The `.nix` file provides the necessary configuration and dependencies for the applications environment.
