@@ -1,4 +1,4 @@
-FROM python:3.9-slim  # Or your desired version
+FROM python:3.9-slim
 
 WORKDIR /home/user/stinky-pinky-brain 
 
@@ -17,4 +17,4 @@ EXPOSE 8080
 RUN pip install gunicorn
 
 # Start the app with Gunicorn
-CMD ["gunicorn", "-b", ":8080", "main:app"]  # Assuming your Flask app is in main.py
+CMD ["gunicorn", "-b", ":8080", "main:app"]
