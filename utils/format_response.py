@@ -5,7 +5,7 @@ import json
 
 def format_response(ai_response):
     if not ai_response:
-        return {"is_error": True, "error_message": "No AI Response found. Check main.py"} 
+        return {"is_error": True, "error_message": "No AI Response found! Check main.py"} 
 
     # Split the response into lines
     ai_response = ai_response\
