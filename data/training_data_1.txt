@@ -1,0 +1,79 @@
+Word 1: Stinky
+Clue 1: Smelly
+Word 2: Pinky
+Clue 2: Finger
+
+Word 1: Romeo
+Clue 1: Montague
+Word 2: Juliet
+Clue 2: Capulet
+
+Word 1: Cranium
+Clue 1: Head or family board game
+Word 2: Uranium
+Clue 2: Radioactive element
+
+Word 1: Rights
+Clue 1: Inalienable
+Word 2: Lights
+Clue 2: Firefly action
+
+Word 1: Fickle
+Clue 1: Unreliable
+Word 2: Pickle
+Clue 2: Trouble
+
+Word 1: Snail
+Clue 1: Slippery creature
+Word 2: Sail
+Clue 2: A sleek form of transportation
+
+Word 1: Abyss
+Clue 1: A bottomless pit
+Word 2: Bliss
+Clue 2: Extreme happiness
+
+Word 1: Master
+Clue 1: Control or expertise
+Word 2: Disaster
+Clue 2: Misfortune or calamity
+
+Word 1: Mystery
+Clue 1: This
+Word 2: History
+Clue 2: Past
+
+Word 1: Lemonade
+Clue 1: Refreshing beverage
+Word 2: Renegade
+Clue 2: A rebel
+
+Word 1: Need
+Clue 1: Desire
+Word 2: Greed
+Clue 2: Necessity
+
+Word 1: Bitter
+Clue 1: Resentful
+Word 2: Fitter
+Clue 2: More buff
+
+Word 1: Persistent
+Clue 1: Refusal to quit
+Word 2: Resistant
+Clue 2: Refusal to conform
+
+Word 1: Contemplate
+Clue 1: Think deeply
+Word 2: Separate
+Clue 2: Divide evenly
+
+Word 1: Haven
+Clue 1: Safe place
+Word 2: Raven
+Clue 2: Death symbol
+
+Word 1: Sphinx
+Clue 1: Guardian of the Pyramids
+Word 2: Lynx
+Clue 2: A wild cat with tufted ears
