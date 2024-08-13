@@ -7,3 +7,6 @@ python-dotenv
 google-generativeai # Client library for the Gemini API
 Pillow # PIL image-loading library
 flask
+
+# Security
+flask_cors

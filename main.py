@@ -2,17 +2,19 @@ import os
 
 import google.generativeai as genai
 from flask import Flask, jsonify, render_template, request, send_from_directory
-
 from utils.load_training_data import load_training_data
 from utils.load_prompt import load_prompt
 from utils.format_response import format_response
+from flask_cors import CORS
 
 # Load environment variables from .env file
 API_KEY = os.environ.get('API_KEY', 'TODO')
 MODEL = os.environ.get('MODEL', 'gemini-1.5-flash')
+
 genai.configure(api_key=API_KEY)
 
 app = Flask(__name__, template_folder='web')
+CORS(app, resources={r"/*": {"origins": "https://3000-idx-stinky-pinky-control-1723305042530.cluster-fnjdffmttjhy2qqdugh3yehhs2.cloudworkstations.dev"}})
 
 # Swagger
 @app.route('/')
