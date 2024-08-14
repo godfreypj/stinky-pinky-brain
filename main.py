@@ -1,6 +1,7 @@
 import os
 
 import google.generativeai as genai
+from google.cloud import secretmanager
 from flask import Flask, jsonify, render_template, request, send_from_directory
 from utils.load_training_data import load_training_data
 from utils.load_prompt import load_prompt
@@ -8,9 +9,18 @@ from utils.format_response import format_response
 from flask_cors import CORS
 
 # Load environment variables from .env file
-GEMINI_KEY = os.environ.get("GEMINI_KEY", "TODO")
+GEMINI_KEY = os.environ.get('GEMINI_KEY', None) 
 MODEL = os.environ.get("MODEL", "gemini-1.5-flash")
-SP_CONTROL = os.environ.get("SP_CONTROL", "TODO")
+SP_CONTROL = os.environ.get("SP_CONTROL", None)
+
+if GEMINI_KEY is None:
+    try:
+        client = secretmanager.SecretManagerServiceClient()
+        name = f"projects/{PROJECT_ID}/secrets/GEMINI_KEY/versions/latest"
+        response = client.access_secret_version(request={"name": name})
+        GEMINI_KEY = response.payload.data.decode("UTF-8")
+    except Exception as e:
+        return jsonify({"error": f"Error accessing Secret Manager: {e}"}), 500
 
 genai.configure(api_key=GEMINI_KEY)
 
@@ -26,22 +36,7 @@ def home():
 
 @app.route("/api/generate", methods=["GET"])
 def generate_api():
-    if GEMINI_KEY == "TODO":
-        return (
-            jsonify(
-                {
-                    "error": """
-            To get started, get an API key at
-            https://g.co/ai/idxGetGeminiKey and enter it in
-            .env
-            """.replace(
-                        "\n", ""
-                    )
-                }
-            ),
-            400,
-        )
-    if SP_CONTROL == "TODO":
+    if SP_CONTROL is None:
         return (
             jsonify(
                 {
