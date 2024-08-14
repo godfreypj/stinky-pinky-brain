@@ -25,7 +25,7 @@ This project is designed to work within the Google Project IDX environment. The 
 The `.env` file contains the following environment variables:
 API Key: Obtain a Gemini API key and set it in the .env file:
 ```bash
-API_KEY = 'YOUR_API_KEY'
+GEMINI_KEY = 'YOUR_GEMINI_KEY'
 MODEL = 'YOUR_MODEL'
 ```
 

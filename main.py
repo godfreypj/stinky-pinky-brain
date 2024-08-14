@@ -8,11 +8,11 @@ from utils.format_response import format_response
 from flask_cors import CORS
 
 # Load environment variables from .env file
-API_KEY = os.environ.get("API_KEY", "TODO")
+GEMINI_KEY = os.environ.get("GEMINI_KEY", "TODO")
 MODEL = os.environ.get("MODEL", "gemini-1.5-flash")
 SP_CONTROL = os.environ.get("SP_CONTROL", "TODO")
 
-genai.configure(api_key=API_KEY)
+genai.configure(api_key=GEMINI_KEY)
 
 app = Flask(__name__, template_folder="web")
 CORS(app, resources={r"/*": {"origins": SP_CONTROL}})
@@ -26,7 +26,7 @@ def home():
 
 @app.route("/api/generate", methods=["GET"])
 def generate_api():
-    if API_KEY == "TODO":
+    if GEMINI_KEY == "TODO":
         return (
             jsonify(
                 {

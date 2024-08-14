@@ -10,9 +10,9 @@ class TestGenerateApi(unittest.TestCase):
         self.app = app.test_client()
         self.app.testing = True
 
-    # Test for Missing API_KEY
-    def test_missing_api_key(self):
-        with patch("main.API_KEY", "TODO"):
+    # Test for Missing GEMINI_KEY
+    def test_missing_gemini_key(self):
+        with patch("main.GEMINI_KEY", "TODO"):
             response = self.app.get("/api/generate")
             self.assertEqual(response.status_code, 400)
             data = response.get_json()
