@@ -10,7 +10,7 @@
     pkgs.black
   ];
   # Sets environment variables in the workspace
-  env = {};
+  env = { };
   idx = {
     # Search for the extensions you want on https://open-vsx.org/ and use "publisher.id"
     extensions = [
@@ -29,7 +29,7 @@
       };
       onStart = {
         command = "./devserver.sh 5000";
-      }; 
+      };
       # To run something each time the workspace is (re)started, use the `onStart` hook
     };
     # Enable previews and customize configuration

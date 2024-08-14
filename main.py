@@ -12,11 +12,13 @@ from flask_cors import CORS
 GEMINI_KEY = os.environ.get('GEMINI_KEY', None) 
 MODEL = os.environ.get("MODEL", "gemini-1.5-flash")
 SP_CONTROL = os.environ.get("SP_CONTROL", None)
+PROJECT_ENV = os.environ.get("PROJECT_ENV", None)
 
-if GEMINI_KEY is None:
+if PROJECT_ENV != "local":
     try:
         client = secretmanager.SecretManagerServiceClient()
-        name = f"projects/{PROJECT_ID}/secrets/GEMINI_KEY/versions/latest"
+        print(f"PROJECT_ENV: {PROJECT_ENV}")
+        name = f"projects/{PROJECT_ENV}/secrets/GEMINI_KEY/versions/latest"
         response = client.access_secret_version(request={"name": name})
         GEMINI_KEY = response.payload.data.decode("UTF-8")
     except Exception as e:
