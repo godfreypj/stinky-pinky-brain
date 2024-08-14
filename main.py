@@ -15,9 +15,10 @@ SP_CONTROL = os.environ.get("SP_CONTROL", None)
 PROJECT_ENV = os.environ.get("PROJECT_ENV", None)
 
 if PROJECT_ENV != "local":
+    print(f"SEARCHFORME: {PROJECT_ENV}")
     try:
         client = secretmanager.SecretManagerServiceClient()
-        print(f"PROJECT_ENV: {PROJECT_ENV}")
+
         name = f"projects/{PROJECT_ENV}/secrets/GEMINI_KEY/versions/latest"
         response = client.access_secret_version(request={"name": name})
         GEMINI_KEY = response.payload.data.decode("UTF-8")
