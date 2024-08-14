@@ -2,3 +2,5 @@
 __pycache__
 .env
 .idx/integrations.json
+.vscode/*
+.vscode/settings.json

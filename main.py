@@ -8,38 +8,62 @@ from utils.format_response import format_response
 from flask_cors import CORS
 
 # Load environment variables from .env file
-API_KEY = os.environ.get('API_KEY', 'TODO')
-MODEL = os.environ.get('MODEL', 'gemini-1.5-flash')
-SP_CONTROL = os.environ.get('SP_CONTROL')
+API_KEY = os.environ.get("API_KEY", "TODO")
+MODEL = os.environ.get("MODEL", "gemini-1.5-flash")
+SP_CONTROL = os.environ.get("SP_CONTROL", "TODO")
 
 genai.configure(api_key=API_KEY)
 
-app = Flask(__name__, template_folder='web')
+app = Flask(__name__, template_folder="web")
 CORS(app, resources={r"/*": {"origins": SP_CONTROL}})
 
+
 # Swagger
-@app.route('/')
+@app.route("/")
 def home():
-    return render_template('index.html')
+    return render_template("index.html")
+
 
 @app.route("/api/generate", methods=["GET"])
 def generate_api():
-    if API_KEY == 'TODO':
-        return jsonify({ "error": '''
+    if API_KEY == "TODO":
+        return (
+            jsonify(
+                {
+                    "error": """
             To get started, get an API key at
             https://g.co/ai/idxGetGeminiKey and enter it in
             .env
-            '''.replace('\n', '') }), 400
+            """.replace(
+                        "\n", ""
+                    )
+                }
+            ),
+            400,
+        )
+    if SP_CONTROL == "TODO":
+        return (
+            jsonify(
+                {
+                    "error": """
+            Unable to find Stinky Pinky Control in env.
+            """.replace(
+                        "\n", ""
+                    )
+                }
+            ),
+            400,
+        )
     try:
         # Go get the training data
         training_data = load_training_data()
         if training_data.startswith("Error:"):
-            return jsonify({ "error": training_data }), 500
+            return jsonify({"error": training_data}), 500
 
         # Add that to the prompt
         content = load_prompt(training_data)
         if content.startswith("Error:"):
-            return jsonify({ "error": content }), 500
+            return jsonify({"error": content}), 500
 
         # Give it to the robot
         model = genai.GenerativeModel(model_name=MODEL)
@@ -51,20 +75,22 @@ def generate_api():
 
         # Parse it
         parsed_data = format_response(ai_response)
-        if parsed_data.get("is_error", False):  
+        if parsed_data.get("is_error", False):
             return jsonify({"error": parsed_data.get("error_message")}), 404
 
         # Access and return the parsed data
         actual_data = parsed_data.get("data")
-        return jsonify({"text": actual_data}), 200, {'Content-Type': 'application/json'}
+        return jsonify({"text": actual_data}), 200, {"Content-Type": "application/json"}
     except Exception as e:
         print("JSON Parsing Error:", e)
         with app.app_context():
-            return jsonify({ "error": str(e) })
+            return jsonify({"error": str(e)})
 
-@app.route('/<path:path>')
+
+@app.route("/<path:path>")
 def serve_static(path):
-    return send_from_directory('web', path)
+    return send_from_directory("web", path)
+
 
 if __name__ == "__main__":
-    app.run(port=int(os.environ.get('PORT', 5000)))
+    app.run(port=int(os.environ.get("PORT", 5000)))
