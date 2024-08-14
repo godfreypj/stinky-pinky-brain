@@ -10,11 +10,12 @@ from flask_cors import CORS
 # Load environment variables from .env file
 API_KEY = os.environ.get('API_KEY', 'TODO')
 MODEL = os.environ.get('MODEL', 'gemini-1.5-flash')
+SP_CONTROL = os.environ.get('SP_CONTROL')
 
 genai.configure(api_key=API_KEY)
 
 app = Flask(__name__, template_folder='web')
-CORS(app, resources={r"/*": {"origins": "https://3000-idx-stinky-pinky-control-1723305042530.cluster-fnjdffmttjhy2qqdugh3yehhs2.cloudworkstations.dev"}})
+CORS(app, resources={r"/*": {"origins": SP_CONTROL}})
 
 # Swagger
 @app.route('/')
