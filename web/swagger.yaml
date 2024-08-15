@@ -8,14 +8,16 @@ servers:
 paths:
   /:
     get:
-      description: Serves this page - the Swagger Docs.
+      description: Serves the Swagger documentation page.
       responses:
         200:
-          description: HTML content for the API Docs.
+          description: HTML content for the API documentation.
 
   /api/generate:
     get:
       description: Generates a word puzzle using AI. Requires a valid API key.
+      security:
+        - ApiKeyAuth: []  # Apply API key authentication to this endpoint
       responses:
         200:
           description: A JSON object containing the generated word puzzle.
@@ -36,11 +38,11 @@ paths:
                       word2:
                         type: string
         400:
-          description: Bad request. Missing or invalid API key.
+          description: Bad request. Missing or invalid configuration or API key.
         500:
-          description: Internal server error. Problem with training data or prompt.
+          description: Internal server error. Problem with training data, prompt, or AI response parsing.
         404:
-          description: Not found. Error occurred during puzzle generation.
+          description: Not found. Error occurred during AI response parsing.
 
   /{path}: 
     get:
@@ -57,9 +59,9 @@ paths:
 
 components:
   securitySchemes:
-    ApiKeyAuth:        # TODO
+    ApiKeyAuth:        
       type: apiKey
-      in: header
-      name: X-API-Key
-security:
-  - ApiKeyAuth: []
+      in: header         # Assuming the API key is passed in the header
+      name: X-API-Key    # Adjust the header name if needed
+# security:
+#   - ApiKeyAuth: []  # You can uncomment this if you want to apply the API key globally
