@@ -10,3 +10,4 @@ flask
 
 # Security
 flask_cors
+google-cloud-secret-manager

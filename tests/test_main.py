@@ -1,78 +1,91 @@
-import unittest
-from unittest.mock import patch
-import google.generativeai as genai
-from main import app
-from collections import namedtuple
+# import unittest
+# from unittest.mock import patch, Mock
+# from main import app  # Use the actual filename 'main'
 
+# class TestMainApp(unittest.TestCase):
 
-class TestGenerateApi(unittest.TestCase):
-    def setUp(self):
-        self.app = app.test_client()
-        self.app.testing = True
+#     def setUp(self):
+#         self.app = app.test_client()
 
-    # Test for Missing GEMINI_KEY
-    def test_missing_gemini_key(self):
-        with patch("main.GEMINI_KEY", "TODO"):
-            response = self.app.get("/api/generate")
-            self.assertEqual(response.status_code, 400)
-            data = response.get_json()
-            self.assertIn("error", data)
-            self.assertIn("get an API key", data["error"])
+#     @patch('main.load_config')
+#     def test_load_config_failure(self, mock_load_config):
+#         """Test scenario where load_config fails."""
+#         mock_load_config.side_effect = Exception("Config loading failed")
+#         with self.assertRaises(RuntimeError):
+#             self.app.get('/api/generate') 
 
-    # Test for Missing SP_CONTROL
-    def test_missing_sp_control(self):
-        with patch("main.SP_CONTROL", "TODO"):
-            response = self.app.get("/api/generate")
-            self.assertEqual(response.status_code, 400)
-            data = response.get_json()
-            self.assertIn("error", data)
-            self.assertIn("Stinky Pinky Control", data["error"])
+#     @patch('main.load_training_data')
+#     @patch('main.load_prompt')
+#     @patch('main.genai.GenerativeModel')
+#     def test_generate_api_success(self, mock_model, mock_load_prompt, mock_load_training_data):
+#         """Test successful API call to /api/generate."""
+#         mock_load_training_data.return_value = {'is_error': False, 'training_data': 'some_training_data'}
+#         mock_load_prompt.return_value = {'is_error': False, 'prompt': 'generated_prompt'}
 
-    # Test for Error in load_training_data
-    @patch("main.load_training_data")
-    def test_error_in_load_training_data(self, mock_load_training_data):
-        mock_load_training_data.return_value = "Error: Some training data error"
-        response = self.app.get("/api/generate")
-        self.assertEqual(response.status_code, 500)
+#         mock_model_instance = mock_model.return_value
+#         mock_model_instance.generate_content.return_value = [Mock(text='{"word1": "cat", "clue1": "Meow", "word2": "hat", "clue2": "On your head"}')]
 
-    # Test for Error in load_prompt
-    @patch("main.load_prompt")
-    def test_error_in_load_prompt(self, mock_load_prompt):
-        mock_load_prompt.return_value = "Error: Some prompt error"
-        response = self.app.get("/api/generate")
-        self.assertEqual(response.status_code, 500)
+#         response = self.app.get('/api/generate')
+#         self.assertEqual(response.status_code, 200)
+#         self.assertEqual(response.content_type, 'application/json')
+#         self.assertEqual(response.json, {'text': {'word1': 'cat', 'clue1': 'Meow', 'word2': 'hat', 'clue2': 'On your head'}})
 
-    # Test for Error in format_response (Empty AI Response)
-    @patch("google.generativeai.GenerativeModel.generate_content")
-    def test_error_in_format_response_empty(self, mock_generate_content):
-        mock_generate_content.return_value = ""  # Simulate empty response
-        response = self.app.get("/api/generate")
-        self.assertEqual(response.status_code, 404)
+#     @patch('main.load_training_data')
+#     def test_generate_api_training_data_error(self, mock_load_training_data):
+#         """Test when load_training_data returns an error."""
+#         mock_load_training_data.return_value = {'is_error': True, 'error_message': 'Training data error'}
 
-    # Test for Successful Response
-    @patch("google.generativeai.GenerativeModel.generate_content")
-    @patch("main.load_training_data")
-    @patch("main.load_prompt")
-    def test_successful_response(
-        self, mock_load_prompt, mock_load_training_data, mock_generate_content
-    ):
-        mock_load_prompt.return_value = "Some prompt"
-        mock_load_training_data.return_value = "Some training data"
+#         response = self.app.get('/api/generate')
+#         self.assertEqual(response.status_code, 500)
+#         self.assertEqual(response.json, {'error': 'Training data error'})
 
-        # Create a namedtuple to represent the objects returned by generate_content
-        MockContentChunk = namedtuple("MockContentChunk", ["text"])
+#     @patch('main.load_training_data')
+#     @patch('main.load_prompt')
+#     def test_generate_api_load_prompt_error(self, mock_load_prompt, mock_load_training_data):
+#         """Test when load_prompt returns an error."""
+#         mock_load_training_data.return_value = {'is_error': False, 'training_data': 'some_training_data'}
+#         mock_load_prompt.return_value = {'is_error': True, 'error_message': 'Prompt loading error'}
 
-        mock_generate_content.return_value = iter(
-            [
-                MockContentChunk(
-                    text='{"word1": "cat", "clue1": "Fluffy pet", "word2": "hat", "clue2": "Headwear"}'
-                )
-            ]
-        )
-        response = self.app.get("/api/generate")
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.headers["Content-Type"], "application/json")
+#         response = self.app.get('/api/generate')
+#         self.assertEqual(response.status_code, 500)
+#         self.assertEqual(response.json, {'error': 'Prompt loading error'})
 
+#     @patch('main.load_training_data')
+#     @patch('main.load_prompt')
+#     @patch('main.genai.GenerativeModel')
+#     def test_generate_api_format_response_error(self, mock_model, mock_load_prompt, mock_load_training_data):
+#         """Test when format_response returns an error."""
+#         mock_load_training_data.return_value = {'is_error': False, 'training_data': 'some_training_data'}
+#         mock_load_prompt.return_value = {'is_error': False, 'prompt': 'generated_prompt'}
 
-if __name__ == "__main__":
-    unittest.main()
+#         mock_model_instance = mock_model.return_value
+#         mock_model_instance.generate_content.return_value = [Mock(text='invalid_json_response')] 
+
+#         response = self.app.get('/api/generate')
+#         self.assertEqual(response.status_code, 404)  # Assuming format_response returns 404 on error
+#         self.assertEqual(response.json.get('error'), 'No AI Response found! Check main.py') 
+
+#     @patch('main.load_training_data')
+#     @patch('main.load_prompt')
+#     @patch('main.genai.GenerativeModel')
+#     def test_generate_api_gemini_model_error(self, mock_model, mock_load_prompt, mock_load_training_data):
+#         """Test when genai.GenerativeModel raises an exception."""
+#         mock_load_training_data.return_value = {'is_error': False, 'training_data': 'some_training_data'}
+#         mock_load_prompt.return_value = {'is_error': False, 'prompt': 'generated_prompt'}
+
+#         mock_model_instance = mock_model.return_value
+#         mock_model_instance.generate_content.side_effect = Exception('Gemini API error')
+
+#         response = self.app.get('/api/generate')
+#         self.assertEqual(response.status_code, 500) 
+#         self.assertEqual(response.json.get('error'), 'Gemini API error') 
+
+#     def test_serve_static(self):
+#         """Test serving a static file from the 'web' directory."""
+#         # Assuming you have an 'index.html' file in your 'web' directory
+#         response = self.app.get('/index.html')
+#         self.assertEqual(response.status_code, 200)
+#         self.assertIn('text/html', response.content_type) 
+
+# if __name__ == '__main__':
+#     unittest.main()

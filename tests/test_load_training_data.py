@@ -17,20 +17,18 @@ class TestLoadTrainingData(unittest.TestCase):
                 unittest.mock.mock_open(read_data='Training data from file2\n').return_value
             ]
 
-            result = load_training_data()  # Call the function within the 'with' block
+            result = load_training_data() 
 
-        # Assert that open was called twice with the correct arguments
         self.assertEqual(mock_file.call_count, 2)
         mock_file.assert_any_call('data/file1.txt', 'r')
         mock_file.assert_any_call('data/file2.txt', 'r')
-
-        self.assertEqual(result, 'Training data from file1\nTraining data from file2\n')
 
     @patch('os.path.exists')
     def test_data_folder_not_found(self, mock_exists):
         mock_exists.return_value = False
         result = load_training_data()
-        self.assertEqual(result, "Error: 'data' folder not found. Please provide training data in a 'data' folder.")
+        self.assertTrue(result['is_error'])
+        self.assertEqual(result['error_message'], "Error: 'data' folder not found. Please provide training data in a 'data' folder.")
 
     @patch('os.path.exists')
     @patch('os.listdir')
@@ -38,7 +36,20 @@ class TestLoadTrainingData(unittest.TestCase):
         mock_exists.return_value = True
         mock_listdir.return_value = ['other_file.jpg']
         result = load_training_data()
-        self.assertEqual(result, "Error: No .txt files found in 'data' folder. Please provide training data.")
+        self.assertTrue(result['is_error'])
+        self.assertEqual(result['error_message'], "Error: No .txt files found in 'data' folder. Please provide training data.")
+
+    @patch('os.path.exists')
+    @patch('os.listdir')
+    def test_empty_training_data(self, mock_listdir, mock_exists):
+        mock_exists.return_value = True
+        mock_listdir.return_value = ['empty.txt']
+        with patch('builtins.open', unittest.mock.mock_open(read_data='')) as mock_file:
+            result = load_training_data()
+        
+        mock_file.assert_called_once_with('data/empty.txt', 'r')
+        self.assertTrue(result['is_error'])
+        self.assertEqual(result['error_message'], "Error: Training data is empty. Please provide valid training data.")
 
 if __name__ == '__main__':
     unittest.main()

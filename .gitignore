@@ -4,3 +4,4 @@ __pycache__
 .idx/integrations.json
 .vscode/*
 .vscode/settings.json
+test_data/
