@@ -3,13 +3,10 @@ from google.cloud import secretmanager_v1 as secretmanager
 
 def load_config():
     """Loads environment variables and sets up configuration."""
-
     gemini_key = os.environ.get("GEMINI_KEY")
     model = os.environ.get("MODEL", "gemini-1.5-flash")
     sp_control = os.environ.get("SP_CONTROL")
     project_id = os.environ.get("PROJECT_ID")
-    if not all([gemini_key, model, sp_control, project_id]):
-        return Exception("Missing required configuration values")
 
     if project_id != "local":
         try:
@@ -20,6 +17,9 @@ def load_config():
         except Exception as e:
             return e
 
+    if not all([gemini_key, model, sp_control, project_id]):
+        return Exception("Missing required configuration values")
+    
     return {
         "GEMINI_KEY": gemini_key,
         "MODEL": model,
