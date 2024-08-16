@@ -10,7 +10,7 @@ The frontend of the game sends a request to the `api/generate` endpoint. The app
 > Training data must be provided in the form of .txt files in the `data` folder.
 
 ### 2. Loads a Prompt
-> A prompt must be provided in the form of a .txt file in the `data` folder. The desired format for the response is added.
+> A prompt must be provided in the form of a .txt file in the `data` folder. The desired format for the response is added
 
 ### 3. LLM Interaction
 > The combined data is sent to the specified LLM to generate a response.
