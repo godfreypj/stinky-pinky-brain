@@ -1,12 +1,17 @@
 steps:
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '-t', 'gcr.io/$PROJECT_ID/cloud-run-source-deploy/$REPO_NAME/stinky-pinky-brain-dev:$COMMIT_SHA', '.']
+  args: ['build', '-t', '$_AR_HOSTNAME/$PROJECT_ID/cloud-run-source-deploy/$REPO_NAME/stinky-pinky-brain-dev:$COMMIT_SHA', '.']
   id: 'Build Docker Image'
 
 - name: 'gcr.io/$PROJECT_ID/cloud-run-source-deploy/$REPO_NAME/stinky-pinky-brain-dev:$COMMIT_SHA'
   entrypoint: 'bash' 
   args: ['-c', 'python -m unittest discover tests']
   id: 'Run Unit Tests'
+
+# Explicit Push step to Artifact Registry
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push', '$_AR_HOSTNAME/$PROJECT_ID/cloud-run-source-deploy/$REPO_NAME/stinky-pinky-brain-dev:$COMMIT_SHA']
+  id: 'Push to Artifact Registry'
 
 - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
   args: 
@@ -15,17 +20,17 @@ steps:
   - deploy
   - stinky-pinky-brain-dev
   - '--image'
-  - 'gcr.io/$PROJECT_ID/cloud-run-source-deploy/$REPO_NAME/stinky-pinky-brain-dev:$COMMIT_SHA'
+  - '$_AR_HOSTNAME/$PROJECT_ID/cloud-run-source-deploy/$REPO_NAME/stinky-pinky-brain-dev:$COMMIT_SHA'
   - '--region'
   - northamerica-northeast1
   - '--platform'
   - managed
   - '--allow-unauthenticated'
   id: 'Deploy to Cloud Run'
-  waitFor: ['Run Unit Tests']  # Only deploy if tests pass
+  waitFor: ['Push to Artifact Registry']  # Wait for the push to complete before deploying
 
 images:
-  - 'gcr.io/$PROJECT_ID/cloud-run-source-deploy/$REPO_NAME/stinky-pinky-brain-dev:$COMMIT_SHA'
+  - '$_AR_HOSTNAME/$PROJECT_ID/cloud-run-source-deploy/$REPO_NAME/stinky-pinky-brain/stinky-pinky-brain-dev:$COMMIT_SHA'
 
 options:
   substitutionOption: ALLOW_LOOSE
