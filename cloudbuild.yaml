@@ -1,29 +1,30 @@
-# This file defines the build, test, and deploy steps for your Cloud Run service
-
 steps:
-- name: 'gcr.io/cloud-builders/docker'  # Use the Docker build image
-  args: ['build', '-t', 'gcr.io/stinky-pinky-app/stinky-pinky-brain-dev:latest', '.']  # Build the Docker image
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', 'gcr.io/stinky-pinky-app/stinky-pinky-brain-dev:$COMMIT_SHA', '.']
+  id: "Build"
 
-- name: 'gcr.io/stinky-pinky-app/stinky-pinky-brain-dev:latest'  # Use the built image to run tests
+- name: 'gcr.io/stinky-pinky-app/stinky-pinky-brain-dev:$COMMIT_SHA'
   entrypoint: 'bash' 
-  args: ['-c', 'python -m unittest discover tests']  # Execute unit tests
+  args: ['-c', 'python -m unittest discover tests']
+  id: "Test"
 
-- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'  # Use the Cloud SDK image
+- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
   args: 
   - gcloud
   - run
   - deploy
-  - stinky-pinky-brain-dev  # Name of your Cloud Run service
+  - stinky-pinky-brain-dev
   - '--image'
-  - gcr.io/stinky-pinky-app/stinky-pinky-brain-dev:latest
+  - gcr.io/stinky-pinky-app/stinky-pinky-brain-dev:$COMMIT_SHA
   - '--region'
-  - northamerica-northeast1        # Adjust the region as needed
+  - northamerica-northeast1
   - '--platform'
   - managed
   - '--allow-unauthenticated'
+  id: "Deploy"
 
 images:
-  - gcr.io/stinky-pinky-app/stinky-pinky-brain-dev:latest
+  - gcr.io/stinky-pinky-app/stinky-pinky-brain-dev:$COMMIT_SHA
 
 options:
   substitutionOption: ALLOW_LOOSE
