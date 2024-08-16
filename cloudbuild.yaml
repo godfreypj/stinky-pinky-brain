@@ -1,9 +1,9 @@
 steps:
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '-t', 'gcr.io/stinky-pinky-app/stinky-pinky-brain-dev:$COMMIT_SHA', '.']
+  args: ['build', '-t', 'gcr.io/stinky-pinky-app/cloud-run-source-deploy/stinky-pinky-brain-dev:$COMMIT_SHA', '.']
   id: "Build"
 
-- name: 'gcr.io/stinky-pinky-app/stinky-pinky-brain-dev:$COMMIT_SHA'
+- name: 'gcr.io/stinky-pinky-app/cloud-run-source-deploy/stinky-pinky-brain-dev:$COMMIT_SHA'
   entrypoint: 'bash' 
   args: ['-c', 'python -m unittest discover tests']
   id: "Test"
@@ -15,7 +15,7 @@ steps:
   - deploy
   - stinky-pinky-brain-dev
   - '--image'
-  - gcr.io/stinky-pinky-app/stinky-pinky-brain-dev:$COMMIT_SHA
+  - gcr.io/stinky-pinky-app/cloud-run-source-deploy/stinky-pinky-brain-dev:$COMMIT_SHA
   - '--region'
   - northamerica-northeast1
   - '--platform'
@@ -24,7 +24,7 @@ steps:
   id: "Deploy"
 
 images:
-  - gcr.io/stinky-pinky-app/stinky-pinky-brain-dev:$COMMIT_SHA
+  - gcr.io/stinky-pinky-app/cloud-run-source-deploy/stinky-pinky-brain-dev:$COMMIT_SHA
 
 options:
   substitutionOption: ALLOW_LOOSE
