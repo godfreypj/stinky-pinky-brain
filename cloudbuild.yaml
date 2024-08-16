@@ -9,6 +9,13 @@ steps:
       - '--path=.'
     id: Buildpack
     entrypoint: pack
+  - name: '$_AR_HOSTNAME/$PROJECT_ID/cloud-run-source-deploy/$REPO_NAME/$_SERVICE_NAME-test:$COMMIT_SHA' 
+    entrypoint: 'pack'
+    args: 
+      - 'test'  # Use the 'pack test' command
+      - '--network=cloudbuild'
+      - '--path=.'
+    id: Test
   - name: gcr.io/cloud-builders/docker
     args:
       - push
