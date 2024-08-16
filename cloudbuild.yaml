@@ -9,6 +9,12 @@ steps:
       - '--path=.'
     id: Buildpack
     entrypoint: pack
+  - name: gcr.io/cloud-builders/docker
+    args:
+      - push
+      - >-
+        $_AR_HOSTNAME/$PROJECT_ID/cloud-run-source-deploy/$REPO_NAME/$_SERVICE_NAME:$COMMIT_SHA
+    id: Push
   - name: >-
       gcr.io/$_AR_HOSTNAME/$PROJECT_ID/cloud-run-source-deploy/$REPO_NAME/$_SERVICE_NAME:$COMMIT_SHA
     args:
@@ -16,12 +22,6 @@ steps:
       - python -m unittest discover tests
     id: Test
     entrypoint: bash
-  - name: gcr.io/cloud-builders/docker
-    args:
-      - push
-      - >-
-        $_AR_HOSTNAME/$PROJECT_ID/cloud-run-source-deploy/$REPO_NAME/$_SERVICE_NAME:$COMMIT_SHA
-    id: Push
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:slim'
     args:
       - run
