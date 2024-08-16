@@ -1,0 +1,32 @@
+name: Test and Deploy to Cloud Run
+
+on:
+  push:
+    branches: [ main ]  # Trigger on pushes to the main branch
+
+jobs:
+  build_and_test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3  # Check out your code
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'  # Or your desired Python version
+
+    - name: Install dependencies
+      run: |
+        python -m venv venv
+        source venv/bin/activate
+        pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: Run tests
+      run: python -m unittest discover tests 
+
+  deploy: 
+    needs: build_and_test  # Only run if the tests pass
+    runs-on: ubuntu-latest
+    # ... (Add steps to deploy to Cloud Run here)
