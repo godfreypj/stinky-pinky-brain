@@ -9,17 +9,13 @@ steps:
       - '--path=.'
     id: Buildpack
     entrypoint: pack
-  - name: '$_AR_HOSTNAME/$PROJECT_ID/cloud-run-source-deploy/$REPO_NAME/$_SERVICE_NAME-test:$COMMIT_SHA' 
-    entrypoint: 'bash'
-    args: 
+  - name: >-
+      gcr.io/$_AR_HOSTNAME/$PROJECT_ID/cloud-run-source-deploy/$REPO_NAME/$_SERVICE_NAME:$COMMIT_SHA
+    args:
       - '-c'
-      - |
-        python3 -m venv venv 
-        source venv/bin/activate 
-        pip install --upgrade pip
-        pip install -r requirements.txt
-        python -m unittest discover tests  
+      - python -m unittest discover tests
     id: Test
+    entrypoint: bash
   - name: gcr.io/cloud-builders/docker
     args:
       - push
