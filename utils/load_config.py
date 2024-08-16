@@ -8,7 +8,7 @@ def load_config():
     sp_control = os.environ.get("SP_CONTROL")
     project_id = os.environ.get("PROJECT_ID")
 
-    if project_id != "local":
+    if project_id != "local" or project_id == None:
         try:
             client = secretmanager.SecretManagerServiceClient()
             name = f"projects/{project_id}/secrets/GEMINI_KEY/versions/latest"
