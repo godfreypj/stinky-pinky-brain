@@ -10,11 +10,15 @@ steps:
     id: Buildpack
     entrypoint: pack
   - name: '$_AR_HOSTNAME/$PROJECT_ID/cloud-run-source-deploy/$REPO_NAME/$_SERVICE_NAME-test:$COMMIT_SHA' 
-    entrypoint: 'pack'
+    entrypoint: 'bash'
     args: 
-      - 'test'  # Use the 'pack test' command
-      - '--network=cloudbuild'
-      - '--path=.'
+      - '-c'
+      - |
+        python3 -m venv venv 
+        source venv/bin/activate 
+        pip install --upgrade pip
+        pip install -r requirements.txt
+        python -m unittest discover tests  
     id: Test
   - name: gcr.io/cloud-builders/docker
     args:
