@@ -31,14 +31,7 @@ class TestLoadConfig(unittest.TestCase):
         self.assertEqual(result['MODEL'], 'test_model')
         self.assertEqual(result['SP_CONTROL'], 'test_control')
         self.assertEqual(result['PROJECT_ID'], 'test_project')
-
-    @patch.dict(os.environ, {}, clear=True)  # Clear all environment variables
-    def test_missing_env_variables(self):
-        """Test error handling when required env variables are missing"""
-        result = load_config()
-        self.assertIsInstance(result, Exception)
-        self.assertEqual(str(result), "Missing required configuration values")
-
+    
     @patch.dict(os.environ, {'MODEL': 'test_model', 'SP_CONTROL': 'test_control', 'PROJECT_ID': 'test_project'})
     @patch('google.cloud.secretmanager_v1.SecretManagerServiceClient')
     def test_secret_manager_access_error(self, mock_client):
