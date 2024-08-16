@@ -1,12 +1,12 @@
 steps:
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '-t', 'gcr.io/stinky-pinky-app/cloud-run-source-deploy/stinky-pinky-brain-dev:$COMMIT_SHA', '.']
-  id: "Build"
+  args: ['build', '-t', 'gcr.io/$PROJECT_ID/cloud-run-source-deploy/$REPO_NAME/$_SERVICE_NAME:$COMMIT_SHA', '.']
+  id: 'Build Docker Image'
 
-- name: 'gcr.io/stinky-pinky-app/cloud-run-source-deploy/stinky-pinky-brain-dev:$COMMIT_SHA'
+- name: 'gcr.io/$PROJECT_ID/cloud-run-source-deploy/$REPO_NAME/$_SERVICE_NAME:$COMMIT_SHA'
   entrypoint: 'bash' 
   args: ['-c', 'python -m unittest discover tests']
-  id: "Test"
+  id: 'Run Unit Tests'
 
 - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
   args: 
@@ -15,16 +15,17 @@ steps:
   - deploy
   - stinky-pinky-brain-dev
   - '--image'
-  - gcr.io/stinky-pinky-app/cloud-run-source-deploy/stinky-pinky-brain-dev:$COMMIT_SHA
+  - 'gcr.io/$PROJECT_ID/cloud-run-source-deploy/$REPO_NAME/$_SERVICE_NAME:$COMMIT_SHA'  # Updated image path
   - '--region'
   - northamerica-northeast1
   - '--platform'
   - managed
   - '--allow-unauthenticated'
-  id: "Deploy"
+  id: 'Deploy to Cloud Run'
+  waitFor: ['Run Unit Tests']
 
 images:
-  - gcr.io/stinky-pinky-app/cloud-run-source-deploy/stinky-pinky-brain-dev:$COMMIT_SHA
+  - 'gcr.io/$PROJECT_ID/cloud-run-source-deploy/$REPO_NAME/$_SERVICE_NAME:$COMMIT_SHA'  # Updated image path
 
 options:
   substitutionOption: ALLOW_LOOSE
