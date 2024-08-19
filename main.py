@@ -2,9 +2,9 @@ import os
 
 import google.generativeai as genai
 from flask import Flask, jsonify, render_template, request, send_from_directory
-from utils.load_training_data import load_training_data
-from utils.load_prompt import load_prompt
-from utils.format_response import format_response
+from services.load_training_data import load_training_data
+from services.load_prompt import load_prompt
+from services.format_response import format_response
 from utils.load_config import load_config
 from flask_cors import CORS
 
