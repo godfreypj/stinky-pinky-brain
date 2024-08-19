@@ -2,6 +2,23 @@ import os
 
 
 def load_prompt(training_data):
+    """
+    Loads and constructs the prompt for the AI model.
+
+    Args:
+        training_data (str): Training examples to include in the prompt.
+
+    Returns:
+        dict: 
+            - is_error (bool): True if an error occurred during loading.
+            - error_message (str, optional): Error details if `is_error` is True.
+            - prompt (str, optional): The constructed prompt if successful.
+
+    Functionality:
+        - Checks for the existence of the 'data' directory and 'prompt.txt' file.
+        - Loads the content of 'prompt.txt'.
+        - Appends training data and desired response format to the prompt.
+    """
     data_dir = "data"
     prompt = ""
 

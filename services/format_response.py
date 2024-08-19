@@ -3,8 +3,19 @@ import json
 
 import json
 
-
 def format_response(ai_response):
+    """
+    Parses AI response, extracting 'word1', 'clue1', 'word2', 'clue2' as JSON.
+
+    Args:
+        ai_response (str): Raw AI response.
+
+    Returns:
+        dict: 
+            - is_error (bool): True if parsing failed.
+            - error_message (str, optional): Error details if `is_error` is True.
+            - formatted_response (dict, optional): Extracted data if successful.
+    """
     if not ai_response or ai_response.strip() == "":
         return {
             "is_error": True,

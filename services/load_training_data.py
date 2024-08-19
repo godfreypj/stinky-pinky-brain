@@ -2,6 +2,19 @@ import os
 
 
 def load_training_data():
+    """
+    Loads training data from .txt files in the 'data' directory.
+
+    Returns:
+        dict:
+            - is_error (bool): True if an error occurred during loading.
+            - error_message (str, optional): Error details if `is_error` is True.
+            - training_data (str, optional): The concatenated content of .txt files if successful.
+
+    Functionality:
+        - Checks for the existence of the 'data' directory and .txt files within it.
+        - Reads and concatenates the content of all .txt files in the 'data' directory.
+    """
     data_dir = "data"
     training_data = ""
 

@@ -9,18 +9,24 @@ from utils.load_config import load_config
 from flask_cors import CORS
 
 # Load configuration
-try:
-    config = load_config()
-    GEMINI_KEY = config["GEMINI_KEY"]
-    MODEL = config["MODEL"]
-    SP_CONTROL = config["SP_CONTROL"]
-    PROJECT_ENV = config["PROJECT_ENV"]
-except Exception as e:
-    raise RuntimeError("Unable to load configuration", e)
+config = load_config()
+if isinstance(config, Exception):
+    print("Configuration loading failed:", config)
+    exit(1)
+
+GEMINI_KEY = config["GEMINI_KEY"]
+MODEL = config["MODEL"]
+SP_CONTROL = config["SP_CONTROL"]
+PROJECT_ENV = config["PROJECT_ENV"]
 
 app = Flask(__name__, template_folder="web")
 CORS(app, resources={r"/*": {"origins": SP_CONTROL}})
 genai.configure(api_key=GEMINI_KEY)
+
+print('*******\nBeep Boop. Welcome to Stinky Pinky Brain.\n')
+print('Running in env: ', PROJECT_ENV)
+print('Using model: ', MODEL)
+
 
 # Swagger
 @app.route("/")
