@@ -5,5 +5,4 @@ __pycache__
 .vscode/*
 .vscode/settings.json
 test_data/
-.coveragerc
 .coverage
