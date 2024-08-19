@@ -22,11 +22,14 @@ jobs:
         source venv/bin/activate
         pip install --upgrade pip
         pip install -r requirements.txt
-        pip install coverage  # Install the coverage library
+        pip install coverage
 
     - name: Run tests with coverage
-      run: coverage run -m unittest discover tests
+      run: |
+        source venv/bin/activate
+        coverage run -m unittest discover tests
 
     - name: Generate coverage report
       run: |
+        source venv/bin/activate
         coverage report -m
