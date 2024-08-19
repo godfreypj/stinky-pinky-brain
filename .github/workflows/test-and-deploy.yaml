@@ -1,7 +1,7 @@
-name: Test on Push to Main
+name: Test on Pull Request
 
 on:
-  push:
+  pull_request:
     branches: [ main ]
 
 jobs:
@@ -26,10 +26,10 @@ jobs:
 
     - name: Run tests with coverage
       run: |
-        source venv/bin/activate
+        source venv/bin/activate 
         coverage run -m unittest discover tests
 
     - name: Generate coverage report
       run: |
-        source venv/bin/activate
+        source venv/bin/activate 
         coverage report -m
