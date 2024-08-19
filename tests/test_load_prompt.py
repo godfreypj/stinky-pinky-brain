@@ -1,6 +1,6 @@
 import unittest
 from unittest.mock import patch
-from utils.load_prompt import load_prompt
+from services.load_prompt import load_prompt
 
 class TestLoadPrompt(unittest.TestCase):
 

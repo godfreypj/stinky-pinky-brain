@@ -1,6 +1,6 @@
 import unittest
 from unittest.mock import patch
-from utils.load_training_data import load_training_data
+from services.load_training_data import load_training_data
 
 class TestLoadTrainingData(unittest.TestCase):
 
