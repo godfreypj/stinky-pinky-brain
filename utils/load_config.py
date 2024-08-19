@@ -6,23 +6,24 @@ def load_config():
     gemini_key = os.environ.get("GEMINI_KEY")
     model = os.environ.get("MODEL", "gemini-1.5-flash")
     sp_control = os.environ.get("SP_CONTROL")
-    project_id = os.environ.get("PROJECT_ID")
+    project_env = os.environ.get("PROJECT_ENV")
+    secret_location = os.environ.get("SECRET_LOCATION")
 
-    if project_id != "local":
+    if project_env != "local":
         try:
             client = secretmanager.SecretManagerServiceClient()
-            name = f"projects/{project_id}/secrets/GEMINI_KEY/versions/latest"
+            name = f'{secret_location}'
             response = client.access_secret_version(request={"name": name})
             gemini_key = response.payload.data.decode("UTF-8")
         except Exception as e:
             return e
 
-    if not all([gemini_key, model, sp_control, project_id]):
+    if not all([gemini_key, model, sp_control, project_env]):
         return Exception("Missing required configuration values")
     
     return {
         "GEMINI_KEY": gemini_key,
         "MODEL": model,
         "SP_CONTROL": sp_control,
-        "PROJECT_ID": project_id
+        "PROJECT_ENV": project_env
     }

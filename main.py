@@ -14,7 +14,7 @@ try:
     GEMINI_KEY = config["GEMINI_KEY"]
     MODEL = config["MODEL"]
     SP_CONTROL = config["SP_CONTROL"]
-    PROJECT_ID = config["PROJECT_ID"]
+    PROJECT_ENV = config["PROJECT_ENV"]
 except Exception as e:
     raise RuntimeError("Unable to load configuration", e)
 
