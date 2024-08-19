@@ -12,8 +12,7 @@ def load_config():
     if project_env != "local":
         try:
             client = secretmanager.SecretManagerServiceClient()
-            name = f'{secret_location}'
-            response = client.access_secret_version(request={"name": name})
+            response = client.access_secret_version(request={"name": secret_location})
             gemini_key = response.payload.data.decode("UTF-8")
         except Exception as e:
             return e
